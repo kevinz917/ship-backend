@@ -46,6 +46,40 @@ const addShip = async (req, res, next) => {
   }
 };
 
+const saveShip = async (req, res, next) => {
+  try {
+    let shipId = req.body.shipId;
+    const fetchedShip = await Ship.findById(shipId);
+    (fetchedShip.note = req.body.note),
+      (fetchedShip.votes = req.body.votes),
+      (fetchedShip.userIds = req.body.userIds);
+
+    let savedShip = await fetchedShip.save();
+    if (!savedShip) {
+      const err = new Error("Could not save ship");
+      err.statusCode = 404;
+      throw err;
+    }
+    res.status(200).json({
+      message: "Saved ship successfully",
+      ship: savedShip,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Remove ship
+const removeShip = async (req, res, next) => {
+  try {
+    let shipId = req.body.shipId;
+    await Ship.findOneAndDelete({ _id: shipId });
+    res.status(200).json({ message: "Deleted ship successfully" });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // Toggle voting
 // auth { shipId(Str), vote(num)}
 const toggleVote = async (req, res, next) => {
@@ -82,4 +116,6 @@ module.exports = {
   getShips,
   addShip,
   toggleVote,
+  saveShip,
+  removeShip,
 };

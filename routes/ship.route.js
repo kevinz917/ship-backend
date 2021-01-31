@@ -7,6 +7,9 @@ router.get("/", shipController.getShips);
 // Add new ship
 router.post("/add", shipController.addShip);
 
+// Save ship
+router.post("/save", shipController.saveShip);
+
 // Toggle vote
 router.post("/vote", shipController.toggleVote);
 

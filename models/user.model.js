@@ -6,6 +6,7 @@ const userSchema = new Schema({
   netId: { type: String, required: true },
   studentId: { type: String, required: true },
   ship_cnt: { type: Number, required: true },
+  ships: { type: Array, required: true },
   privacy: { type: String, required: true },
   votes: { type: Array, required: true },
 });

@@ -1,16 +1,20 @@
 const router = require("express").Router();
 const shipController = require("../controllers/ship.controller");
+const auth = require("../middleware/auth");
 
 // Fetch all ships
 router.get("/", shipController.getShips);
 
 // Add new ship
-router.post("/add", shipController.addShip);
+router.post("/add", auth, shipController.addShip);
 
 // Save ship
-router.post("/save", shipController.saveShip);
+router.post("/save", auth, shipController.saveShip);
 
 // Toggle vote
-router.post("/vote", shipController.toggleVote);
+router.post("/vote", auth, shipController.toggleVote);
+
+// Toggle privacy
+router.post("/togglePrivacy", auth, shipController.toggleVote);
 
 module.exports = router;

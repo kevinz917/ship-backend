@@ -46,6 +46,7 @@ const addShip = async (req, res, next) => {
   }
 };
 
+// Save ship
 const saveShip = async (req, res, next) => {
   try {
     let shipId = req.body.shipId;
@@ -84,7 +85,7 @@ const removeShip = async (req, res, next) => {
 // auth { shipId(Str), vote(num)}
 const toggleVote = async (req, res, next) => {
   try {
-    let userId = req.userId;
+    let userId = req.body.userId;
     let shipId = req.body.shipId;
     let vote = req.body.vote;
 
@@ -112,10 +113,27 @@ const toggleVote = async (req, res, next) => {
   }
 };
 
+// toggle privacy
+const togglePrivacy = async (req, res, next) => {
+  try {
+    let shipId = req.body.shipId;
+    let mode = req.body.mode;
+
+    let fetchedShip = await Ship.findById(shipId);
+    fetchedShip.privacy = mode;
+    await fetchedShip.save();
+
+    res.status(200).json({ message: `Toggle privacy successfully to ${Mode}` });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getShips,
   addShip,
   toggleVote,
   saveShip,
   removeShip,
+  togglePrivacy,
 };

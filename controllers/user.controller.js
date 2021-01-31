@@ -47,6 +47,21 @@ const addUser = async (req, res, next) => {
   }
 };
 
+// Fetch single user
+const fetchUser = async (req, res, next) => {
+  try {
+    let userId = req.userId;
+    let fetchedUser = await User.findById(userId);
+    if (fetchedUser) {
+      res
+        .status(200)
+        .json({ message: "Fetched user successfully", user: fetchedUser });
+    }
+  } catch (err) {
+    return err;
+  }
+};
+
 // Add ship to user
 const addShip = async (req, res, next) => {
   try {
@@ -76,9 +91,26 @@ const removeShip = async (req, res, next) => {
   }
 };
 
+// Toggle privacy
+const togglePrivacy = async (req, res, next) => {
+  try {
+    let userId = req.userId;
+    let mode = req.body.mode; //"public" or "private"
+
+    let fetchedUser = await User.findById(req.userId);
+    fetchedUser.privacy = mode;
+    await fetchedUser.save();
+    req.status(200).json({ message: `Toggled privacy to ${mode}` });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getUsers,
   addUser,
   addShip,
   removeShip,
+  fetchUser,
+  togglePrivacy,
 };

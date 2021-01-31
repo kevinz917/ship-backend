@@ -1,5 +1,7 @@
 const Ship = require("../models/ship.model.js");
+const User = require("../models/user.model");
 
+// Get ship
 const getShips = async (req, res, next) => {
   try {
     console.log("Fetching ships");
@@ -19,6 +21,7 @@ const getShips = async (req, res, next) => {
   }
 };
 
+// Add ship
 const addShip = async (req, res, next) => {
   try {
     const newShip = new Ship({
@@ -43,7 +46,40 @@ const addShip = async (req, res, next) => {
   }
 };
 
+// Toggle voting
+// auth { shipId(Str), vote(num)}
+const toggleVote = async (req, res, next) => {
+  try {
+    let userId = req.userId;
+    let shipId = req.body.shipId;
+    let vote = req.body.vote;
+
+    let fetchedShip = await Ship.findById(shipId);
+    fetchedShip.votes += vote;
+    await fetchedShip.save();
+
+    let fetchedUser = await User.findById(userId);
+
+    switch (count) {
+      case 1:
+        if (!fetchedUser.reactions.includes(shipId)) {
+          fetchedUser.votes.push(shipId);
+        }
+        break;
+      case -1:
+        if (fetchedUser.reactions.includes(shipId)) {
+          const idx = fetchedUser.votes.indexOf(shipId);
+          fetchedUser.votes.splice(idx, 1);
+        }
+        break;
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getShips,
   addShip,
+  toggleVote,
 };

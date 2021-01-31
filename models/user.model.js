@@ -7,6 +7,7 @@ const userSchema = new Schema({
   studentId: { type: String, required: true },
   ship_cnt: { type: Number, required: true },
   privacy: { type: String, required: true },
+  votes: { type: Array, required: true },
 });
 
 const User = mongoose.model("user", userSchema);

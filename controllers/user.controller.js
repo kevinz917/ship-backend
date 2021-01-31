@@ -1,5 +1,6 @@
 const User = require("../models/user.model.js");
 
+// Get users
 const getUsers = async (req, res, next) => {
   try {
     console.log("Fetching users");
@@ -19,6 +20,7 @@ const getUsers = async (req, res, next) => {
   }
 };
 
+// Add user
 const addUser = async (req, res, next) => {
   try {
     const newUser = new User({

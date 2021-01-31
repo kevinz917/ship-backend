@@ -16,4 +16,7 @@ router.post("/fetchUser", userController.fetchUser);
 // Toggle privacy
 router.post("/togglePrivacy", userController.togglePrivacy);
 
+// Fetch all Yale Students
+router.get("/allStudents", userController.fetchStudents);
+
 module.exports = router;

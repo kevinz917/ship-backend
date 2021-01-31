@@ -1,6 +1,6 @@
 const User = require("../models/user.model.js");
 const Ship = require("../models/ship.model");
-
+const studentList = require("../util/studentList.json");
 // Get users
 const getUsers = async (req, res, next) => {
   try {
@@ -107,6 +107,17 @@ const togglePrivacy = async (req, res, next) => {
   }
 };
 
+const fetchStudents = async (req, res, next) => {
+  try {
+    res.status(200).json({
+      message: "Fetched student list successfully",
+      data: studentList,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getUsers,
   addUser,
@@ -114,4 +125,5 @@ module.exports = {
   removeShip,
   fetchUser,
   togglePrivacy,
+  fetchStudents,
 };

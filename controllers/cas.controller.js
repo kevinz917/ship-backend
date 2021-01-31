@@ -72,7 +72,7 @@ const casLogin = (req, res, next) => {
         return res.redirect(req.query.redirect);
       }
 
-      return res.redirect(process.env.FRONTEND_URL);
+      return res.redirect(process.env.FRONTEND_URL + "leaderboard");
     });
   })(req, res, next);
 };

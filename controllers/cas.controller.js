@@ -64,6 +64,8 @@ const casLogin = (req, res, next) => {
           }
           console.log("Created new user model");
           req.session.userId = savedUser._id;
+        } else {
+          req.session.userId = models[0]._id;
         }
       }
       if (req.query.redirect) {

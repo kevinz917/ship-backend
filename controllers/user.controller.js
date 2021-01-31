@@ -5,6 +5,7 @@ const Ship = require("../models/ship.model");
 const getUsers = async (req, res, next) => {
   try {
     console.log("Fetching users");
+    console.log(req.session.userId);
 
     let allUsers = await User.find();
     if (!allUsers) {

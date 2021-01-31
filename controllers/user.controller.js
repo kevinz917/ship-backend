@@ -22,10 +22,10 @@ const getUsers = async (req, res, next) => {
 const addUser = async (req, res, next) => {
   try {
     const newUser = new User({
-      userIds: req.body.userIds,
-      note: req.body.note,
-      creator_netId: req.body.creator_netId,
-      votes: req.body.votes,
+      email: req.body.email,
+      netId: req.body.netId,
+      studentId: req.body.studentId,
+      ship_cnt: req.body.ship_cnt,
       privacy: req.body.privacy,
     });
     let savedUser = await newUser.save();

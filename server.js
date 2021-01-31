@@ -1,5 +1,6 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 
 require("dotenv").config();
 
@@ -8,6 +9,17 @@ const port = process.env.PORT || 5000;
 
 app.set("trust proxy", true);
 app.use(express.json());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://ship.wtf",
+      "https://web.postman.co",
+    ],
+    credentials: true,
+    exposedHeaders: ["set-cookie"],
+  })
+);
 
 const uri = process.env.ATLAS_URI;
 mongoose.connect(uri, {

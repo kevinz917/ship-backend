@@ -1,6 +1,10 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
+const passport = require("passport");
+const session = require("express-session");
+const MongoDBStore = require("connect-mongodb-session")(session);
+const cookieParser = require("cookie-parser");
 
 require("dotenv").config();
 
@@ -9,6 +13,32 @@ const port = process.env.PORT || 5000;
 
 app.set("trust proxy", true);
 app.use(express.json());
+
+const store = new MongoDBStore({
+  uri: process.env.ATLAS_URI,
+  collection: "userSessions",
+  expires: 365 * 24 * 60 * 60 * 1000,
+});
+store.on("error", function (error) {
+  console.log(error);
+});
+
+app.use(cookieParser("this cas shit dumb as fuck"));
+app.use(
+  session({
+    secret: "this cas shit dumb as fuck",
+    store: store,
+    resave: true,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 365 * 24 * 60 * 60 * 1000,
+      httpOnly: false,
+      sameSite: true,
+      secure: port === 5000 ? false : true,
+    },
+  })
+);
+
 app.use(
   cors({
     origin: [
@@ -40,6 +70,11 @@ connection.once("open", () => {
 
   const userRouter = require("./routes/user.route");
   app.use("/user", userRouter);
+
+  const casRouter = require("./routes/cas.route");
+  app.use(passport.initialize());
+  app.use(passport.session());
+  app.use("/auth", casRouter);
 
   // Once routes have been created, start listening.
   app.listen(port, () => {

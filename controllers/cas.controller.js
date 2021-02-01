@@ -79,8 +79,8 @@ const casLogin = (req, res, next) => {
 };
 
 const casCheck = function (req, res) {
-  console.log("check", req.user);
-  console.log("session", req.session);
+  // console.log("check", req.user);
+  // console.log("session", req.session);
   if (req.user && req.session.userId) {
     res.json({
       auth: true,

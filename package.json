@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "start": "if [$NODE_ENV = 'production']; then node server.js; else nodemon server.js; fi"
+  },
   "dependencies": {
     "connect-mongodb-session": "^2.4.1",
     "cookie-parser": "^1.4.5",

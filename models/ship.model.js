@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const shipSchema = new Schema(
   {
     userNames: { type: [String], required: true },
+    netIds: { type: [String], required: false },
     note: { type: String, required: false },
     creator_netId: { type: String, required: true },
     votes: { type: Number, required: true },

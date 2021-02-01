@@ -16,4 +16,7 @@ router.post("/vote", shipController.toggleVote);
 // Toggle privacy
 router.post("/togglePrivacy", shipController.toggleVote);
 
+// Add multiple
+router.post("/addMultiple", shipController.addMultiple);
+
 module.exports = router;

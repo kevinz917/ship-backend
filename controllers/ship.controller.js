@@ -129,6 +129,51 @@ const togglePrivacy = async (req, res, next) => {
   }
 };
 
+const addMultiple = async (req, res, next) => {
+  try {
+    console.log(req.session.netId);
+    let creator_netId = req.session.netId;
+    let shipList = req.body.shipList;
+
+    let fetchedUser = await User.find({ netId: creator_netId });
+
+    // console.log(fetchedUser);
+
+    // delete existing ships
+    for (let i = 0; i < fetchedUser.ships.length; i++) {
+      let shipId = fetchedUser.ships[i];
+      await Ship.findByIdAndDelete(shipId);
+    }
+
+    console.log(shipList);
+
+    for (let i = 0; i < shipList.length; i++) {
+      let ship = shipList[i];
+
+      // const newShip = new Ship({
+      //   userNames: [
+      //     ship[0].label.split(" ").slice(0, 2).join(" "),
+      //     ship[1].label.split(" ").slice(0, 2).join(" "),
+      //   ],
+      //   netIds: [
+      //     ship[0].value.split(" ").slice(0, 2).join(" "),
+      //     ship[1].value.split(" ").slice(0, 2).join(" "),
+      //   ],
+      //   creator_netId: req.session.netId,
+      //   votes: 0,
+      //   privacy: req.body.privacy,
+      // });
+      // console.log(newShip);
+
+      // Save ship
+    }
+
+    // add new ships
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getShips,
   addShip,
@@ -136,4 +181,5 @@ module.exports = {
   saveShip,
   removeShip,
   togglePrivacy,
+  addMultiple,
 };

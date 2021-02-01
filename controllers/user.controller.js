@@ -48,7 +48,7 @@ const addUser = async (req, res, next) => {
 // Fetch single user
 const fetchUser = async (req, res, next) => {
   try {
-    let userId = req.userId;
+    let userId = req.session.userId;
     let fetchedUser = await User.findById(userId);
     if (fetchedUser) {
       res
@@ -92,13 +92,13 @@ const removeShip = async (req, res, next) => {
 // Toggle privacy
 const togglePrivacy = async (req, res, next) => {
   try {
-    let userId = req.userId;
-    let mode = req.body.mode; //"public" or "private"
+    let userId = req.session.userId;
+    let privacy = req.body.privacy; //"public" or "private"
 
-    let fetchedUser = await User.findById(req.userId);
-    fetchedUser.privacy = mode;
+    let fetchedUser = await User.findById(userId);
+    fetchedUser.privacy = privacy;
     await fetchedUser.save();
-    req.status(200).json({ message: `Toggled privacy to ${mode}` });
+    res.status(200).json({ message: `Toggled privacy to ${privacy}` });
   } catch (err) {
     next(err);
   }

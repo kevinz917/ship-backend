@@ -136,9 +136,7 @@ const addMultiple = async (req, res, next) => {
     let creator_netId = req.session.netId;
     let shipList = req.body.shipList;
 
-    console.log(shipList);
-
-    let fetchedUser = await User.findById(req.session.userId);
+    let fetchedUser = await User.findById(userId);
 
     // delete existing ships
     for (let i = 0; i < fetchedUser.ships.length; i++) {
@@ -159,7 +157,7 @@ const addMultiple = async (req, res, next) => {
           ship[0].value.split(" ").slice(0, 2).join(" "),
           ship[1].value.split(" ").slice(0, 2).join(" "),
         ],
-        creator_netId: req.session.netId,
+        creator_netId: creator_netId,
         votes: 0,
         privacy: "public",
       });

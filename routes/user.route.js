@@ -11,7 +11,7 @@ router.post("/add", userController.addUser);
 router.post("/removeShip", userController.removeShip);
 
 // Fetch user
-router.post("/fetchUser", userController.fetchUser);
+router.get("/fetchUser", userController.fetchUser);
 
 // Toggle privacy
 router.post("/togglePrivacy", userController.togglePrivacy);

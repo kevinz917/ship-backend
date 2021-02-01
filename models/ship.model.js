@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const shipSchema = new Schema(
   {
-    userIds: { type: [String], required: true },
+    userNames: { type: [String], required: true },
     note: { type: String, required: false },
     creator_netId: { type: String, required: true },
     votes: { type: Number, required: true },

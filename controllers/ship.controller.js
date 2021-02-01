@@ -25,7 +25,7 @@ const getShips = async (req, res, next) => {
 const addShip = async (req, res, next) => {
   try {
     const newShip = new Ship({
-      userIds: req.body.userIds,
+      userNames: req.body.userNames,
       note: req.body.note,
       creator_netId: req.session.netId,
       votes: 0,
@@ -53,7 +53,7 @@ const saveShip = async (req, res, next) => {
     const fetchedShip = await Ship.findById(shipId);
     (fetchedShip.note = req.body.note),
       (fetchedShip.votes = req.body.votes),
-      (fetchedShip.userIds = req.body.userIds);
+      (fetchedShip.userNames = req.body.userNames);
 
     let savedShip = await fetchedShip.save();
     if (!savedShip) {

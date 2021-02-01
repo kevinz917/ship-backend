@@ -4,9 +4,8 @@ const User = require("../models/user.model");
 // Get ship
 const getShips = async (req, res, next) => {
   try {
-    console.log("Fetching ships");
-
     let allShips = await Ship.find();
+
     if (!allShips) {
       const err = new Error("Could not fetch all ships");
       err.statusCode = 404;
@@ -27,7 +26,7 @@ const addShip = async (req, res, next) => {
     const newShip = new Ship({
       userNames: req.body.userNames,
       note: req.body.note,
-      creator_netId: req.session.netId,
+      creator_netId: req.body.creator_netId,
       votes: 0,
       privacy: req.body.privacy,
     });
@@ -85,7 +84,7 @@ const removeShip = async (req, res, next) => {
 // auth { shipId(Str), vote(num)}
 const toggleVote = async (req, res, next) => {
   try {
-    let userId = req.body.userId;
+    let userId = req.session.userId;
     let shipId = req.body.shipId;
     let vote = req.body.vote;
 
@@ -95,19 +94,21 @@ const toggleVote = async (req, res, next) => {
 
     let fetchedUser = await User.findById(userId);
 
-    switch (count) {
+    switch (vote) {
       case 1:
-        if (!fetchedUser.reactions.includes(shipId)) {
+        if (!fetchedUser.votes.includes(shipId)) {
           fetchedUser.votes.push(shipId);
         }
         break;
       case -1:
-        if (fetchedUser.reactions.includes(shipId)) {
+        if (fetchedUser.votes.includes(shipId)) {
           const idx = fetchedUser.votes.indexOf(shipId);
           fetchedUser.votes.splice(idx, 1);
         }
         break;
     }
+    await fetchedUser.save();
+    res.status(200).json({ message: "Saved vote to user and ship" });
   } catch (err) {
     next(err);
   }

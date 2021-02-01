@@ -2,7 +2,7 @@ const router = require("express").Router();
 const shipController = require("../controllers/ship.controller");
 
 // Fetch all ships
-router.get("/", shipController.getShips);
+router.get("/all", shipController.getShips);
 
 // Add new ship
 router.post("/add", shipController.addShip);
@@ -14,7 +14,7 @@ router.post("/save", shipController.saveShip);
 router.post("/vote", shipController.toggleVote);
 
 // Toggle privacy
-router.post("/togglePrivacy", shipController.toggleVote);
+router.post("/togglePrivacy", shipController.togglePrivacy);
 
 // Add multiple
 router.post("/addMultiple", shipController.addMultiple);

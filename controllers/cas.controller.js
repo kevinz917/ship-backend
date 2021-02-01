@@ -45,6 +45,7 @@ const casLogin = (req, res, next) => {
       // console.log("login", req.user);
       if (req.user) {
         const netId = req.user.netId;
+        req.session.netId = netId;
         let models = await User.find({ netId: netId });
         if (models.length === 0) {
           const newUser = new User({

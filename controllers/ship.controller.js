@@ -27,11 +27,11 @@ const addShip = async (req, res, next) => {
     const newShip = new Ship({
       userIds: req.body.userIds,
       note: req.body.note,
-      creator_netId: req.body.creator_netId,
-      votes: req.body.votes,
+      creator_netId: req.session.netId,
+      votes: 0,
       privacy: req.body.privacy,
     });
-    let savedShip = await newShips.save();
+    let savedShip = await newShip.save();
     if (!savedShip) {
       const err = new Error("Could not add ship");
       err.statusCode = 404;

@@ -4,9 +4,6 @@ const studentList = require("../util/studentList.json");
 // Get users
 const getUsers = async (req, res, next) => {
   try {
-    console.log("Fetching users");
-    console.log(req.session.userId);
-
     let allUsers = await User.find();
     if (!allUsers) {
       const err = new Error("Could not fetch all users");
@@ -118,6 +115,34 @@ const fetchStudents = async (req, res, next) => {
   }
 };
 
+const fetchUserShips = async (req, res, next) => {
+  try {
+    let userId = req.session.userId;
+    let fetchedUser = await User.findById(userId);
+
+    fetchedShips = [];
+    for (let i = 0; i < fetchedUser.ships.length; i++) {
+      let fetchedShip = await Ship.findById(fetchedUser.ships[i]);
+      fetchedShips.push(fetchedShip);
+    }
+
+    let data = [];
+    for (let i = 0; i < fetchedShips.length; i++) {
+      singleShip = fetchedShips[i];
+      let ship = [null, null];
+      ship[0] = { value: singleShip.netIds[0], label: singleShip.userNames[0] };
+      ship[1] = { value: singleShip.netIds[1], label: singleShip.userNames[1] };
+      data.push(ship);
+    }
+
+    res.status(200).json({ message: "Retrieved ships", ships: data });
+
+    // Format data for frontend
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getUsers,
   addUser,
@@ -126,4 +151,5 @@ module.exports = {
   fetchUser,
   togglePrivacy,
   fetchStudents,
+  fetchUserShips,
 };

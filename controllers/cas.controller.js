@@ -2,6 +2,9 @@ const passport = require("passport");
 const CasStrategy = require("passport-cas").Strategy;
 const StudentInfo = require("../util/students.json");
 const User = require("../models/user.model.js");
+const Cookies = require("universal-cookie");
+
+const cookies = new Cookies();
 
 passport.use(
   new CasStrategy(
@@ -42,10 +45,12 @@ const casLogin = (req, res, next) => {
       if (err) {
         return next(err);
       }
+      userId = null;
       // console.log("login", req.user);
       if (req.user) {
         const netId = req.user.netId;
         req.session.netId = netId;
+        console.log(req.session.netId);
         let models = await User.find({ netId: netId });
         if (models.length === 0) {
           const newUser = new User({
@@ -58,6 +63,9 @@ const casLogin = (req, res, next) => {
             votes: [],
           });
           let savedUser = await newUser.save();
+
+          // cookies.set("userId", netId);
+
           if (!savedUser) {
             const err = new Error("Could not add user");
             err.statusCode = 404;
@@ -65,14 +73,16 @@ const casLogin = (req, res, next) => {
           }
           console.log("Created new user model");
           req.session.userId = savedUser._id;
+          userId = savedUser._id;
         } else {
           req.session.userId = models[0]._id;
+          userId = req.session.userId;
         }
       }
       if (req.query.redirect) {
         return res.redirect(req.query.redirect);
       }
-
+      res.cookie("userId", userId);
       return res.redirect(process.env.FRONTEND_URL + "leaderboard");
     });
   })(req, res, next);
@@ -80,7 +90,7 @@ const casLogin = (req, res, next) => {
 
 const casCheck = function (req, res) {
   // console.log("check", req.user);
-  // console.log("session", req.session);
+  console.log("session", req.session.netId);
   if (req.user && req.session.userId) {
     res.json({
       auth: true,

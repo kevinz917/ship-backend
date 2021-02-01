@@ -19,4 +19,7 @@ router.post("/togglePrivacy", userController.togglePrivacy);
 // Fetch all Yale Students
 router.get("/allStudents", userController.fetchStudents);
 
+// Fetch ships from users
+router.get("/fetchShips", userController.fetchUserShips);
+
 module.exports = router;

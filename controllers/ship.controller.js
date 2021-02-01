@@ -129,15 +129,16 @@ const togglePrivacy = async (req, res, next) => {
   }
 };
 
+// Add ships
 const addMultiple = async (req, res, next) => {
   try {
-    console.log(req.session.netId);
+    let userId = req.session.userId;
     let creator_netId = req.session.netId;
     let shipList = req.body.shipList;
 
-    let fetchedUser = await User.find({ netId: creator_netId });
+    console.log(shipList);
 
-    // console.log(fetchedUser);
+    let fetchedUser = await User.findById(req.session.userId);
 
     // delete existing ships
     for (let i = 0; i < fetchedUser.ships.length; i++) {
@@ -145,30 +146,35 @@ const addMultiple = async (req, res, next) => {
       await Ship.findByIdAndDelete(shipId);
     }
 
-    console.log(shipList);
-
+    let savedShipIds = [];
     for (let i = 0; i < shipList.length; i++) {
       let ship = shipList[i];
 
-      // const newShip = new Ship({
-      //   userNames: [
-      //     ship[0].label.split(" ").slice(0, 2).join(" "),
-      //     ship[1].label.split(" ").slice(0, 2).join(" "),
-      //   ],
-      //   netIds: [
-      //     ship[0].value.split(" ").slice(0, 2).join(" "),
-      //     ship[1].value.split(" ").slice(0, 2).join(" "),
-      //   ],
-      //   creator_netId: req.session.netId,
-      //   votes: 0,
-      //   privacy: req.body.privacy,
-      // });
-      // console.log(newShip);
+      const newShip = new Ship({
+        userNames: [
+          ship[0].label.split(" ").slice(0, 2).join(" "),
+          ship[1].label.split(" ").slice(0, 2).join(" "),
+        ],
+        netIds: [
+          ship[0].value.split(" ").slice(0, 2).join(" "),
+          ship[1].value.split(" ").slice(0, 2).join(" "),
+        ],
+        creator_netId: req.session.netId,
+        votes: 0,
+        privacy: "public",
+      });
 
       // Save ship
+      let savedShip = await newShip.save();
+      savedShipIds.push(savedShip._id);
     }
 
-    // add new ships
+    // Save to user
+    fetchedUser.ships = savedShipIds;
+    let savedUser = await fetchedUser.save();
+    if (savedUser) {
+      res.status(200).json({ message: "Saved ships", user: savedUser });
+    }
   } catch (err) {
     next(err);
   }

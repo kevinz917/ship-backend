@@ -142,30 +142,55 @@ const addMultiple = async (req, res, next) => {
     // delete existing ships
     for (let i = 0; i < fetchedUser.ships.length; i++) {
       let shipId = fetchedUser.ships[i];
-      await Ship.findByIdAndDelete(shipId);
+      fetchedShip = await Ship.findById(shipId);
+
+      // delete if you're the only shipper
+      if (fetchedShip.shippers === 1) {
+        await fetchedShip.remove();
+      } else {
+        // else reduce shippers by 1, save it
+        fetchedShip.shippers -= 1;
+        await fetchedShip.save();
+      }
     }
 
+    // create new ships
     let savedShipIds = [];
     for (let i = 0; i < shipList.length; i++) {
       let ship = shipList[i];
+
+      let emails = [
+        ship[0].value.split(" ").slice(0, 2).join(" "),
+        ship[1].value.split(" ").slice(0, 2).join(" "),
+      ];
+
+      emails.sort();
 
       const newShip = new Ship({
         userNames: [
           ship[0].label.split(" ").slice(0, 2).join(" "),
           ship[1].label.split(" ").slice(0, 2).join(" "),
         ],
-        netIds: [
-          ship[0].value.split(" ").slice(0, 2).join(" "),
-          ship[1].value.split(" ").slice(0, 2).join(" "),
-        ],
+        emails: emails,
         creator_netId: creator_netId,
         votes: 0,
         privacy: "public",
+        shippers: 1,
       });
 
-      // Save ship
-      let savedShip = await newShip.save();
-      savedShipIds.push(savedShip._id);
+      // try to find an existing ship
+      let findMatchedShip = await Ship.findOne({ emails: emails });
+
+      // ship already exists
+      if (findMatchedShip) {
+        savedShipIds.push(findMatchedShip._id);
+        findMatchedShip.shippers += 1;
+        await findMatchedShip.save();
+      } else {
+        // save new ship
+        let savedShip = await newShip.save();
+        savedShipIds.push(savedShip._id);
+      }
     }
 
     // Save to user

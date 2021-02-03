@@ -130,8 +130,8 @@ const fetchUserShips = async (req, res, next) => {
     for (let i = 0; i < fetchedShips.length; i++) {
       singleShip = fetchedShips[i];
       let ship = [null, null];
-      ship[0] = { value: singleShip.netIds[0], label: singleShip.userNames[0] };
-      ship[1] = { value: singleShip.netIds[1], label: singleShip.userNames[1] };
+      ship[0] = { value: singleShip.emails[0], label: singleShip.userNames[0] };
+      ship[1] = { value: singleShip.emails[1], label: singleShip.userNames[1] };
       data.push(ship);
     }
 

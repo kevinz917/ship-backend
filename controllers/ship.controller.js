@@ -24,7 +24,10 @@ const getShips = async (req, res, next) => {
 const addShip = async (req, res, next) => {
   try {
     const newShip = new Ship({
-      userNames: req.body.userNames,
+      userNames: req.body.userLabels.map((user) =>
+        user.label.split(" ").slice(0, 2).join(" ")
+      ),
+      userLabels: req.body.userLabels,
       note: req.body.note,
       creator_netId: req.body.creator_netId,
       votes: 0,
@@ -142,7 +145,10 @@ const addMultiple = async (req, res, next) => {
       emails.sort();
 
       const newShip = new Ship({
-        userNames: [ship[0].label, ship[1].label],
+        userLabels: [ship[0].label, ship[1].label],
+        userNames: ship.map((user) =>
+          user.label.split(" ").slice(0, 2).join(" ")
+        ),
         emails: emails,
         creator_netId: creator_netId,
         votes: 0,

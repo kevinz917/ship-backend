@@ -122,6 +122,18 @@ const togglePrivacy = async (req, res, next) => {
     let fetchedUser = await User.findById(userId);
     fetchedUser.privacy = privacy;
     await fetchedUser.save();
+
+    // change ships that contain user to privacy
+    userEmail = fetchedUser.email;
+    await Ship.updateMany({ emails: userEmail }, { privacy: privacy });
+
+    // for (let i = 0; i < fetchedUser.ships.length; i++) {
+    //   shipId = fetchedUser.ships[i];
+    //   let singleShip = await Ship.findById(shipId);
+    //   singleShip.privacy = privacy;
+    //   await singleShip.save();
+    // }
+
     res.status(200).json({ message: `Toggled privacy to ${privacy}` });
   } catch (err) {
     next(err);

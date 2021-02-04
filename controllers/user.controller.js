@@ -19,6 +19,28 @@ const getUsers = async (req, res, next) => {
   }
 };
 
+const emojiList = [
+  "😀",
+  "😃",
+  "😄",
+  "😁",
+  "😆",
+  "😅",
+  "😂",
+  "🤣",
+  "😊",
+  "😇",
+  "🙂",
+  "🙃",
+  "😉",
+  "😌",
+  "😎",
+];
+
+const randNum = (a, b) => {
+  return Math.random() * (b - a) + a;
+};
+
 // Add user
 const addUser = async (req, res, next) => {
   try {
@@ -29,7 +51,9 @@ const addUser = async (req, res, next) => {
       privacy: req.body.privacy,
       ships: req.body.ships,
       votes: req.body.votes,
+      profile: emojiList(randNum(0, len(emojiList - 1))),
     });
+
     let savedUser = await newUser.save();
     if (!savedUser) {
       const err = new Error("Could not add user");

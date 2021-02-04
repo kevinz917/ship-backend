@@ -41,16 +41,13 @@ const casLogin = (req, res, next) => {
     }
 
     req.logIn(user, async function (err) {
-      //   console.log(user);
       if (err) {
         return next(err);
       }
       userId = null;
-      // console.log("login", req.user);
       if (req.user) {
         const netId = req.user.netId;
         req.session.netId = netId;
-        console.log(req.session.netId);
         let models = await User.find({ netId: netId });
         if (models.length === 0) {
           const newUser = new User({
@@ -71,7 +68,6 @@ const casLogin = (req, res, next) => {
             err.statusCode = 404;
             return next(err);
           }
-          console.log("Created new user model");
           req.session.userId = savedUser._id;
           userId = savedUser._id;
         } else {
@@ -89,8 +85,6 @@ const casLogin = (req, res, next) => {
 };
 
 const casCheck = function (req, res) {
-  // console.log("check", req.user);
-  console.log("session", req.session.netId);
   if (req.user && req.session.userId) {
     res.json({
       auth: true,

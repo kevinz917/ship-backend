@@ -29,6 +29,8 @@ const addShip = async (req, res, next) => {
       creator_netId: req.body.creator_netId,
       votes: 0,
       privacy: req.body.privacy,
+      shippers: req.body.shippers,
+      emails: req.body.emails,
     });
     let savedShip = await newShip.save();
     if (!savedShip) {
@@ -39,30 +41,6 @@ const addShip = async (req, res, next) => {
     res.status(200).json({
       message: "Added ship successfully",
       ship: newShip,
-    });
-  } catch (err) {
-    next(err);
-  }
-};
-
-// Save ship
-const saveShip = async (req, res, next) => {
-  try {
-    let shipId = req.body.shipId;
-    const fetchedShip = await Ship.findById(shipId);
-    (fetchedShip.note = req.body.note),
-      (fetchedShip.votes = req.body.votes),
-      (fetchedShip.userNames = req.body.userNames);
-
-    let savedShip = await fetchedShip.save();
-    if (!savedShip) {
-      const err = new Error("Could not save ship");
-      err.statusCode = 404;
-      throw err;
-    }
-    res.status(200).json({
-      message: "Saved ship successfully",
-      ship: savedShip,
     });
   } catch (err) {
     next(err);
@@ -204,12 +182,32 @@ const addMultiple = async (req, res, next) => {
   }
 };
 
+// Fetch ships that contain user
+const fetchMyShips = async (req, res, next) => {
+  try {
+    let userId = req.session.userId;
+
+    let fetchedUser = await User.findById(userId);
+    let userEmail = fetchedUser.email;
+
+    let myShips = await Ship.find({ emails: userEmail });
+
+    if (myShips) {
+      res
+        .status(200)
+        .json({ message: "Fetched ships that contain user", ships: myShips });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getShips,
   addShip,
   toggleVote,
-  saveShip,
   removeShip,
   togglePrivacy,
   addMultiple,
+  fetchMyShips,
 };

@@ -60,7 +60,7 @@ mongoose.connect(uri, {
 mongoose.pluralize(null);
 const connection = mongoose.connection;
 connection.once("open", () => {
-  console.log("MongoDB database connection established!");
+  console.log("✅ MongoDB database connection established!");
 });
 
 (async () => {
@@ -78,6 +78,6 @@ connection.once("open", () => {
 
   // Once routes have been created, start listening.
   app.listen(port, () => {
-    console.log(`Server is running on port: ${port}`);
+    console.log(`🔵 Server is running on port: ${port}`);
   });
 })();

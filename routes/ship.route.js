@@ -7,9 +7,6 @@ router.get("/all", shipController.getShips);
 // Add new ship
 router.post("/add", shipController.addShip);
 
-// Save ship
-router.post("/save", shipController.saveShip);
-
 // Toggle vote
 router.post("/vote", shipController.toggleVote);
 
@@ -18,5 +15,8 @@ router.post("/togglePrivacy", shipController.togglePrivacy);
 
 // Add multiple
 router.post("/addMultiple", shipController.addMultiple);
+
+// Fetch ships that contain user
+router.post("/fetchMyShips", shipController.fetchMyShips);
 
 module.exports = router;

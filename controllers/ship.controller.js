@@ -137,18 +137,12 @@ const addMultiple = async (req, res, next) => {
     for (let i = 0; i < shipList.length; i++) {
       let ship = shipList[i];
 
-      let emails = [
-        ship[0].value.split(" ").slice(0, 2).join(" "),
-        ship[1].value.split(" ").slice(0, 2).join(" "),
-      ];
+      let emails = [ship[0].value, ship[1].value];
 
       emails.sort();
 
       const newShip = new Ship({
-        userNames: [
-          ship[0].label.split(" ").slice(0, 2).join(" "),
-          ship[1].label.split(" ").slice(0, 2).join(" "),
-        ],
+        userNames: [ship[0].label, ship[1].label],
         emails: emails,
         creator_netId: creator_netId,
         votes: 0,

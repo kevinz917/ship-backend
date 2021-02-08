@@ -19,4 +19,7 @@ router.post("/addMultiple", shipController.addMultiple);
 // Fetch ships that contain user
 router.post("/fetchMyShips", shipController.fetchMyShips);
 
+// Remove ship
+router.post("/removeShip", shipController.removeShip);
+
 module.exports = router;

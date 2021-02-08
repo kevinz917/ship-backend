@@ -51,15 +51,15 @@ const addShip = async (req, res, next) => {
 };
 
 // Remove ship
-const removeShip = async (req, res, next) => {
-  try {
-    let shipId = req.body.shipId;
-    await Ship.findOneAndDelete({ _id: shipId });
-    res.status(200).json({ message: "Deleted ship successfully" });
-  } catch (err) {
-    next(err);
-  }
-};
+// const removeShip = async (req, res, next) => {
+//   try {
+//     let shipId = req.body.shipId;
+//     await Ship.findOneAndDelete({ _id: shipId });
+//     res.status(200).json({ message: "Deleted ship successfully" });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
 // Toggle voting
 // auth { shipId(Str), vote(num)}
@@ -196,6 +196,29 @@ const fetchMyShips = async (req, res, next) => {
       res
         .status(200)
         .json({ message: "Fetched ships that contain user", ships: myShips });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Remove ship
+const removeShip = async (req, res, next) => {
+  try {
+    let shipId = req.body.shipId;
+    console.log(shipId);
+
+    // find users that created this ship
+    let users = await User.find({ ships: shipId });
+    for (let i = 0; i < users.length; i++) {
+      let idx = users[i].ships.indexOf(shipId);
+      users[i].ships.splice(idx, 1);
+      await users[i].save();
+    }
+
+    let deletedShip = await Ship.findByIdAndDelete(shipId);
+    if (deletedShip) {
+      res.json({ message: `Deleted ship successfully: ${shipId}` });
     }
   } catch (err) {
     next(err);

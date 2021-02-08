@@ -1,5 +1,8 @@
 const Ship = require("../models/ship.model.js");
 const User = require("../models/user.model");
+const mailgun = require("mailgun-js");
+const DOMAIN = "ship.wtf";
+const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: DOMAIN });
 
 // Get ship
 const getShips = async (req, res, next) => {
@@ -125,13 +128,15 @@ const addMultiple = async (req, res, next) => {
       let shipId = fetchedUser.ships[i];
       fetchedShip = await Ship.findById(shipId);
 
-      // delete if you're the only shipper
-      if (fetchedShip.shippers === 1) {
-        await fetchedShip.remove();
-      } else {
-        // else reduce shippers by 1, save it
-        fetchedShip.shippers -= 1;
-        await fetchedShip.save();
+      if (fetchedShip) {
+        // delete if you're the only shipper
+        if (fetchedShip.shippers === 1) {
+          await fetchedShip.remove();
+        } else {
+          // else reduce shippers by 1, save it
+          fetchedShip.shippers -= 1;
+          await fetchedShip.save();
+        }
       }
     }
 
@@ -141,6 +146,23 @@ const addMultiple = async (req, res, next) => {
       let ship = shipList[i];
 
       let emails = [ship[0].value, ship[1].value];
+
+      // send both emails
+      for (let i = 0; i < emails.length; i++) {
+        const data = {
+          from: "Ship <founders@ship.wtf>",
+          to: emails[i],
+          subject: `🚢 You've been shipped by someone ...`,
+          template: "shipped",
+          "h:X-Mailgun-Variables": JSON.stringify({
+            BUTTON_URL: "ship.wtf",
+          }),
+        };
+
+        mg.messages().send(data, function (error, body) {
+          console.log(body);
+        });
+      }
 
       emails.sort();
 

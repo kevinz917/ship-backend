@@ -159,7 +159,9 @@ const fetchUserShips = async (req, res, next) => {
     fetchedShips = [];
     for (let i = 0; i < fetchedUser.ships.length; i++) {
       let fetchedShip = await Ship.findById(fetchedUser.ships[i]);
-      fetchedShips.push(fetchedShip);
+      if (fetchedShip) {
+        fetchedShips.push(fetchedShip);
+      }
     }
 
     let data = [];

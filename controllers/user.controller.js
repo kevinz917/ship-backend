@@ -52,6 +52,7 @@ const addUser = async (req, res, next) => {
       ships: req.body.ships,
       votes: req.body.votes,
       profile: emojiList(randNum(0, len(emojiList - 1))),
+      emailed: [],
     });
 
     let savedUser = await newUser.save();
@@ -126,13 +127,6 @@ const togglePrivacy = async (req, res, next) => {
     // change ships that contain user to privacy
     userEmail = fetchedUser.email;
     await Ship.updateMany({ emails: userEmail }, { privacy: privacy });
-
-    // for (let i = 0; i < fetchedUser.ships.length; i++) {
-    //   shipId = fetchedUser.ships[i];
-    //   let singleShip = await Ship.findById(shipId);
-    //   singleShip.privacy = privacy;
-    //   await singleShip.save();
-    // }
 
     res.status(200).json({ message: `Toggled privacy to ${privacy}` });
   } catch (err) {

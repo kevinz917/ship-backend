@@ -10,6 +10,7 @@ const userSchema = new Schema({
   ships: { type: Array, required: true },
   privacy: { type: String, required: true },
   votes: { type: Array, required: true },
+  emailed: { type: Array, required: false },
 });
 
 const User = mongoose.model("user", userSchema);

@@ -149,19 +149,21 @@ const addMultiple = async (req, res, next) => {
 
       // send both emails
       for (let i = 0; i < emails.length; i++) {
-        const data = {
-          from: "Ship <founders@ship.wtf>",
-          to: emails[i],
-          subject: `🚢 You've been shipped by someone ...`,
-          template: "shipped",
-          "h:X-Mailgun-Variables": JSON.stringify({
-            BUTTON_URL: "ship.wtf",
-          }),
-        };
+        if (!fetchedUser.emailed.includes(emails[i])) {
+          const data = {
+            from: "Ship <founders@ship.wtf>",
+            to: emails[i],
+            subject: `🚢 You've been shipped by someone ...`,
+            template: "shipped",
+            "h:X-Mailgun-Variables": JSON.stringify({
+              BUTTON_URL: "ship.wtf",
+            }),
+          };
 
-        mg.messages().send(data, function (error, body) {
-          console.log(body);
-        });
+          mg.messages().send(data, function (error, body) {
+            console.log(body);
+          });
+        }
       }
 
       emails.sort();
@@ -195,6 +197,14 @@ const addMultiple = async (req, res, next) => {
 
     // Save to user
     fetchedUser.ships = savedShipIds;
+
+    // add saved emails
+    for (let i = 0; i < shipList.length; i++) {
+      let ship = shipList[i];
+      fetchedUser.emailed.push(ship[0].value);
+      fetchedUser.emailed.push(ship[1].value);
+    }
+
     let savedUser = await fetchedUser.save();
     if (savedUser) {
       res.status(200).json({ message: "Saved ships", user: savedUser });

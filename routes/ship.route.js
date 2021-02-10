@@ -22,4 +22,7 @@ router.post("/fetchMyShips", shipController.fetchMyShips);
 // Remove ship
 router.post("/removeShip", shipController.removeShip);
 
+// Count ships
+router.post("/count", shipController.countShips);
+
 module.exports = router;

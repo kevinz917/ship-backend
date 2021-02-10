@@ -4,6 +4,16 @@ const mailgun = require("mailgun-js");
 const DOMAIN = "ship.wtf";
 const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: DOMAIN });
 
+// Count ships
+const countShips = async (req, res, next) => {
+  try {
+    let count = await Ship.count();
+    res.json({ count: count });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // Get ship
 const getShips = async (req, res, next) => {
   try {
@@ -265,4 +275,5 @@ module.exports = {
   togglePrivacy,
   addMultiple,
   fetchMyShips,
+  countShips,
 };

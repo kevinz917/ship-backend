@@ -163,6 +163,10 @@ const addMultiple = async (req, res, next) => {
     let savedShipIds = [];
     for (let i = 0; i < shipList.length; i++) {
       let ship = shipList[i];
+      ship.sort((a, b) => {
+        if (a.value > b.value) return 1;
+        else return -1;
+      });
 
       let emails = [ship[0].value, ship[1].value];
 
@@ -184,8 +188,6 @@ const addMultiple = async (req, res, next) => {
           });
         }
       }
-
-      emails.sort();
 
       const newShip = new Ship({
         userLabels: [ship[0].label, ship[1].label],

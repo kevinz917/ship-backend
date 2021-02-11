@@ -11,6 +11,7 @@ const userSchema = new Schema({
   privacy: { type: String, required: true },
   votes: { type: Array, required: true },
   emailed: { type: Array, required: false },
+  answers: { type: Array, required: true },
 });
 
 const User = mongoose.model("user", userSchema);

@@ -22,4 +22,10 @@ router.get("/allStudents", userController.fetchStudents);
 // Fetch ships from users
 router.get("/fetchShips", userController.fetchUserShips);
 
+// Save answers to user
+router.post("/saveAnswers", userController.saveAnswers);
+
+// Fetch ship partner's answers
+router.post("/fetchUserAnswers", userController.fetchUserAnswers);
+
 module.exports = router;

@@ -53,6 +53,7 @@ const addUser = async (req, res, next) => {
       votes: req.body.votes,
       profile: emojiList(randNum(0, len(emojiList - 1))),
       emailed: [],
+      answers: ["", "", ""],
     });
 
     let savedUser = await newUser.save();
@@ -181,6 +182,61 @@ const fetchUserShips = async (req, res, next) => {
   }
 };
 
+// Save answers  to user
+const saveAnswers = async (req, res, next) => {
+  try {
+    let userId = req.session.userId;
+    let fetchedUser = await User.findById(userId);
+
+    let answerObj = req.body.answerObj;
+    let answerStr = [];
+    for (let key in answerObj) {
+      answerStr.push(answerObj[key]);
+    }
+
+    fetchedUser.answers = answerStr;
+    let user = await fetchedUser.save();
+
+    if (user) {
+      res.status(200).json({ message: "Saved answers successfully" });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+// Fetch user answers
+const fetchUserAnswers = async (req, res, next) => {
+  try {
+    let userEmail = req.body.userEmail;
+    let shipId = req.body.shipId;
+
+    // Fetch ship
+    let fetchedShip = await Ship.findById(shipId);
+    var emailWithoutCurrent = fetchedShip.emails.filter((x) => {
+      return x !== userEmail;
+    });
+
+    let targetEmail = null;
+    if (emailWithoutCurrent.length === 0) {
+      // they shipped themselves lol
+      targetEmail = userEmail;
+    } else {
+      targetEmail = emailWithoutCurrent[0];
+    }
+
+    // Fetch answers from target user
+    let fetchedTargetUser = await User.findOne({ email: targetEmail });
+
+    res.status(200).json({
+      message: "Successfully fetched user partner's answers",
+      answers: fetchedTargetUser.answers,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getUsers,
   addUser,
@@ -190,4 +246,6 @@ module.exports = {
   togglePrivacy,
   fetchStudents,
   fetchUserShips,
+  saveAnswers,
+  fetchUserAnswers,
 };

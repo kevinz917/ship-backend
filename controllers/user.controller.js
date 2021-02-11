@@ -53,7 +53,7 @@ const addUser = async (req, res, next) => {
       votes: req.body.votes,
       profile: emojiList(randNum(0, len(emojiList - 1))),
       emailed: [],
-      answers: [req.body.email, "", "", ""],
+      answers: [req.body.email, "", "", "", ""],
     });
 
     let savedUser = await newUser.save();

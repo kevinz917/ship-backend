@@ -17,6 +17,15 @@ const countShips = async (req, res, next) => {
 // Get ship
 const getShips = async (req, res, next) => {
   try {
+    let userId = req.session.userId;
+    let fetchedUser = await User.findById(userId);
+
+    if (!fetchedUser) {
+      const err = new Error("Could not add user");
+      err.statusCode = 401;
+      return next(err);
+    }
+
     let allShips = await Ship.find();
 
     if (!allShips) {

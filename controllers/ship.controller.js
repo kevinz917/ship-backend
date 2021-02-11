@@ -190,16 +190,16 @@ const addMultiple = async (req, res, next) => {
         shippers: 1,
       });
 
-      // try to find an existing ship
+      // Try to find an existing ship
       let findMatchedShip = await Ship.findOne({ emails: emails });
 
-      // ship already exists
+      // Ship already exists
       if (findMatchedShip) {
         savedShipIds.push(findMatchedShip._id);
         findMatchedShip.shippers += 1;
         await findMatchedShip.save();
       } else {
-        // save new ship
+        // Save new ship
         let savedShip = await newShip.save();
         savedShipIds.push(savedShip._id);
       }
@@ -208,11 +208,14 @@ const addMultiple = async (req, res, next) => {
     // Save to user
     fetchedUser.ships = savedShipIds;
 
-    // add saved emails
+    // Add saved emails
     for (let i = 0; i < shipList.length; i++) {
       let ship = shipList[i];
-      fetchedUser.emailed.push(ship[0].value);
-      fetchedUser.emailed.push(ship[1].value);
+      for (let i = 0; i < 2; i++) {
+        if (fetchedUser.emailed.includes(ship[i].value)) {
+          fetchedUser.emailed.push(ship[i].value);
+        }
+      }
     }
 
     let savedUser = await fetchedUser.save();

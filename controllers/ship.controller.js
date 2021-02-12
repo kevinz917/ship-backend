@@ -111,8 +111,6 @@ const toggleVote = async (req, res, next) => {
     let vote = req.body.vote;
 
     let fetchedShip = await Ship.findById(shipId);
-    fetchedShip.votes += vote;
-    await fetchedShip.save();
 
     let fetchedUser = await User.findById(userId);
 
@@ -120,12 +118,16 @@ const toggleVote = async (req, res, next) => {
       case 1:
         if (!fetchedUser.votes.includes(shipId)) {
           fetchedUser.votes.push(shipId);
+          fetchedShip.votes += vote;
+          await fetchedShip.save();
         }
         break;
       case -1:
         if (fetchedUser.votes.includes(shipId)) {
           const idx = fetchedUser.votes.indexOf(shipId);
           fetchedUser.votes.splice(idx, 1);
+          fetchedShip.votes += vote;
+          await fetchedShip.save();
         }
         break;
     }

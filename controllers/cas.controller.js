@@ -54,10 +54,12 @@ const casLogin = (req, res, next) => {
             email: StudentInfo[req.user.netId].email,
             netId: netId,
             name: StudentInfo[req.user.netId].name,
-            ship_cnt: 3,
+            ship_cnt: 5,
             privacy: "public",
             ships: [],
             votes: [],
+            emailed: [],
+            answers: [StudentInfo[req.user.netId].email, "", "", "", ""],
           });
           let savedUser = await newUser.save();
 

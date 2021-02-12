@@ -228,6 +228,12 @@ const fetchUserAnswers = async (req, res, next) => {
     // Fetch answers from target user
     let fetchedTargetUser = await User.findOne({ email: targetEmail });
 
+    if (!fetchedTargetUser) {
+      const err = new Error("Could not fetch answers");
+      err.statusCode = 404;
+      throw err;
+    }
+
     res.status(200).json({
       message: "Successfully fetched user partner's answers",
       answers: fetchedTargetUser.answers,

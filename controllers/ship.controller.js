@@ -142,6 +142,10 @@ const addMultiple = async (req, res, next) => {
 
     let fetchedUser = await User.findById(userId);
 
+    if (fetchedUser.netId === "cjm253") {
+      res.status(200).json({ message: "No bueno", user: savedUser });
+    }
+
     // delete existing ships
     for (let i = 0; i < fetchedUser.ships.length; i++) {
       let shipId = fetchedUser.ships[i];

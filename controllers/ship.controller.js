@@ -156,6 +156,8 @@ const addMultiple = async (req, res, next) => {
 
     let fetchedUser = await User.findById(userId);
 
+    console.log(fetchedUser);
+
     if (!creator_netId) {
       res.status(200).json({ message: "No bueno" });
       return;
@@ -211,6 +213,10 @@ const addMultiple = async (req, res, next) => {
             }),
           };
 
+          // Send email
+          let email = await mg.messages().send(data);
+          if (email) console.log(email);
+
           // mg.messages().send(data, function (error, body) {
           //   console.log(body);
           // });
@@ -251,7 +257,7 @@ const addMultiple = async (req, res, next) => {
     for (let i = 0; i < shipList.length; i++) {
       let ship = shipList[i];
       for (let j = 0; j < 2; j++) {
-        if (fetchedUser.emailed.includes(ship[j].value)) {
+        if (!fetchedUser.emailed.includes(ship[j].value)) {
           fetchedUser.emailed.push(ship[j].value);
         }
       }
@@ -290,7 +296,6 @@ const fetchMyShips = async (req, res, next) => {
 const removeShip = async (req, res, next) => {
   try {
     let shipId = req.body.shipId;
-    console.log(shipId);
 
     // find users that created this ship
     let users = await User.find({ ships: shipId });

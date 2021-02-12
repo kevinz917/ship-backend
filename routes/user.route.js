@@ -28,4 +28,7 @@ router.post("/saveAnswers", userController.saveAnswers);
 // Fetch ship partner's answers
 router.post("/fetchUserAnswers", userController.fetchUserAnswers);
 
+// Fetch juicy data
+router.get("/fetchData", userController.fetchData);
+
 module.exports = router;

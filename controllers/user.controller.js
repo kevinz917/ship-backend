@@ -1,6 +1,7 @@
 const User = require("../models/user.model.js");
 const Ship = require("../models/ship.model");
 const studentList = require("../util/studentList.json");
+const initialData = require("../util/initialData.json");
 // Get users
 const getUsers = async (req, res, next) => {
   try {
@@ -243,6 +244,63 @@ const fetchUserAnswers = async (req, res, next) => {
   }
 };
 
+const fetchData = async (req, res, next) => {
+  try {
+    let allUserData = initialData;
+
+    let totalUsers = allUserData.users.length;
+    let AvgShipPerUser = 0;
+    let totalShipCount = 0;
+    let Has1Ship = 0;
+    let Has2Ships = 0;
+    let Has3OrMore = 0;
+    let publicProfiles = 0;
+
+    let privateAvgShipPerUser = 0;
+    let privateAccountShipCount = 0;
+    let privateProfiles = 0;
+
+    for (let i = 0; i < allUserData.users.length; i++) {
+      let user = allUserData.users[i];
+      totalShipCount += user.ships.length;
+      if (user.ships.length === 1) {
+        Has1Ship += 1;
+      }
+      if (user.ships.length === 2) {
+        Has2Ships += 1;
+      }
+      if (user.ships.length > 2) {
+        Has3OrMore += 1;
+      }
+      if (user.privacy === "public") {
+        publicProfiles += 1;
+      } else {
+        privateAccountShipCount += user.ships.length;
+      }
+    }
+
+    AvgShipPerUser = totalShipCount / totalUsers;
+
+    // Private users
+    privateProfiles = totalUsers - publicProfiles;
+    privateAvgShipPerUser = privateAccountShipCount / privateProfiles;
+
+    res.json({
+      totalUsers,
+      totalShipCount,
+      Has1Ship,
+      Has2Ships,
+      Has3OrMore,
+      AvgShipPerUser,
+      publicProfiles,
+      privateProfiles,
+      AvgPrivateAccountShip: privateAvgShipPerUser,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getUsers,
   addUser,
@@ -254,4 +312,5 @@ module.exports = {
   fetchUserShips,
   saveAnswers,
   fetchUserAnswers,
+  fetchData,
 };

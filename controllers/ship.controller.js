@@ -47,6 +47,10 @@ const getShips = async (req, res, next) => {
 // Add ship
 const addShip = async (req, res, next) => {
   try {
+    if (!req.session.netId) {
+      res.status(200).json({ message: "Nice Try Erik" });
+      return;
+    }
     let creator_netId = req.session.netId;
 
     if (creator_netId === "cjm253") console.log("CONNOR MANN /addShip");
@@ -98,6 +102,10 @@ const addShip = async (req, res, next) => {
 // auth { shipId(Str), vote(num)}
 const toggleVote = async (req, res, next) => {
   try {
+    if (!req.session.netId) {
+      res.status(200).json({ message: "Nice Try Erik" });
+      return;
+    }
     let userId = req.session.userId;
     let shipId = req.body.shipId;
     let vote = req.body.vote;

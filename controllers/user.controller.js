@@ -124,6 +124,7 @@ const removeShip = async (req, res, next) => {
 const togglePrivacy = async (req, res, next) => {
   try {
     let userId = req.session.userId;
+
     let privacy = req.body.privacy; //"public" or "private"
 
     let fetchedUser = await User.findById(userId);

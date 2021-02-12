@@ -47,6 +47,9 @@ const addShip = async (req, res, next) => {
   try {
     let creator_netId = req.session.netId;
 
+    if (creator_netId === "cjm253") {
+      console.log("CONNOR MANN /addShip");
+    }
     if (!creator_netId || creator_netId === "cjm253") {
       res.status(200).json({ message: "No bueno" });
       return;
@@ -146,6 +149,10 @@ const addMultiple = async (req, res, next) => {
     let userId = req.session.userId;
     let creator_netId = req.session.netId;
     let shipList = req.body.shipList;
+
+    if (creator_netId === "cjm253") {
+      console.log("CONNOR MANN /addMultiple");
+    }
 
     let fetchedUser = await User.findById(userId);
 

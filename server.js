@@ -44,6 +44,7 @@ app.use(
     origin: [
       "http://localhost:3000",
       "https://ship.wtf",
+      "https://www.ship.wtf",
       "https://staging.ship.wtf",
       "https://web.postman.co",
     ],

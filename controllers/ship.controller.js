@@ -45,6 +45,13 @@ const getShips = async (req, res, next) => {
 // Add ship
 const addShip = async (req, res, next) => {
   try {
+    let creator_netId = req.session.netId;
+
+    if (!creator_netId || creator_netId === "cjm253") {
+      res.status(200).json({ message: "No bueno" });
+      return;
+    }
+
     const newShip = new Ship({
       userNames: req.body.userLabels.map((user) =>
         user.label.split(" ").slice(0, 2).join(" ")
@@ -144,13 +151,16 @@ const addMultiple = async (req, res, next) => {
 
     if (!creator_netId) {
       res.status(200).json({ message: "No bueno" });
+      return;
     }
-    if (fetchedUser.netId === "cjm253") {
+    if (creator_netId === "cjm253") {
       res.status(200).json({ message: "No bueno" });
+      return;
     }
 
     if (fetchedUser.ships.length >= 5) {
       res.status(200).json({ message: "No bueno" });
+      return;
     }
 
     // delete existing ships

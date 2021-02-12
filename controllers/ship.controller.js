@@ -183,9 +183,9 @@ const addMultiple = async (req, res, next) => {
             }),
           };
 
-          mg.messages().send(data, function (error, body) {
-            console.log(body);
-          });
+          // mg.messages().send(data, function (error, body) {
+          //   console.log(body);
+          // });
         }
       }
 

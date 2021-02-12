@@ -222,9 +222,9 @@ const addMultiple = async (req, res, next) => {
     // Add saved emails
     for (let i = 0; i < shipList.length; i++) {
       let ship = shipList[i];
-      for (let i = 0; i < 2; i++) {
-        if (fetchedUser.emailed.includes(ship[i].value)) {
-          fetchedUser.emailed.push(ship[i].value);
+      for (let j = 0; j < 2; j++) {
+        if (fetchedUser.emailed.includes(ship[j].value)) {
+          fetchedUser.emailed.push(ship[j].value);
         }
       }
     }

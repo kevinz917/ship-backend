@@ -281,7 +281,9 @@ const fetchMyShips = async (req, res, next) => {
     let fetchedUser = await User.findById(userId);
     let userEmail = fetchedUser.email;
 
-    let myShips = await Ship.find({ emails: userEmail });
+    let myShips = await Ship.find({ emails: userEmail }).select(
+      "-creator_netId"
+    );
 
     if (myShips) {
       res

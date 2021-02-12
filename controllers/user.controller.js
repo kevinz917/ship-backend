@@ -154,7 +154,9 @@ const fetchUserShips = async (req, res, next) => {
 
     fetchedShips = [];
     for (let i = 0; i < fetchedUser.ships.length; i++) {
-      let fetchedShip = await Ship.findById(fetchedUser.ships[i]);
+      let fetchedShip = await Ship.findById(fetchedUser.ships[i]).select(
+        "-creator_netId"
+      );
       if (fetchedShip) {
         fetchedShips.push(fetchedShip);
       }
@@ -213,7 +215,7 @@ const fetchUserAnswers = async (req, res, next) => {
     let shipId = req.body.shipId;
 
     // Fetch ship
-    let fetchedShip = await Ship.findById(shipId);
+    let fetchedShip = await Ship.findById(shipId).select("-creator_netId");
     var emailWithoutCurrent = fetchedShip.emails.filter((x) => {
       return x !== userEmail;
     });

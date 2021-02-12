@@ -26,7 +26,7 @@ const getShips = async (req, res, next) => {
       return next(err);
     }
 
-    let allShips = await Ship.find();
+    let allShips = await Ship.find().select("-creator_netId");
 
     if (!allShips) {
       const err = new Error("Could not fetch all ships");

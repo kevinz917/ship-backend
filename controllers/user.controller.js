@@ -2,6 +2,10 @@ const User = require("../models/user.model.js");
 const Ship = require("../models/ship.model");
 const studentList = require("../util/studentList.json");
 const initialData = require("../util/initialData.json");
+var timeout = require("connect-timeout");
+
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
 // Get users
 const getUsers = async (req, res, next) => {
   try {
@@ -303,9 +307,11 @@ const fetchData = async (req, res, next) => {
 
 const test = async (req, res, next) => {
   try {
-    next(new Error("test"));
+    // next(new Error("test"));
+    // timeout("0s");
+    // await delay(2000);
 
-    // res.json({ test: "Testing" });
+    res.json({ test: "Testing" });
   } catch (err) {
     next(err);
   }

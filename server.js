@@ -12,25 +12,18 @@ require("dotenv").config();
 const app = express();
 const port = process.env.PORT || 5000;
 
-function haltOnTimedout(req, res, next) {
-  console.log("bruh");
-  if (!req.timedout) {
-    console.log("bruh");
-    next();
-  } else {
-    console.log("bruh");
-    res.json({ message: "bruh" });
+const errorHandler = (err, req, res, next) => {
+  if (req.timedout) {
+    res.status(408).json({
+      status: "error",
+      message: "The server has timed out :(",
+    });
   }
-}
+};
 
 app.set("trust proxy", true);
 app.use(express.json());
-// app.use(timeout("10s"));
-
-// app.use((req, res, next) => {
-//   res.json({ done: "done" });
-//   // next();
-// });
+// app.use(timeout("0s"));
 
 const store = new MongoDBStore({
   uri: process.env.ATLAS_URI,
@@ -92,15 +85,7 @@ connection.once("open", () => {
   const userRouter = require("./routes/user.route");
   app.use("/user", userRouter);
 
-  app.use(haltOnTimedout);
-
-  // playing around with error handlers
-  app.use((err, req, res, next) => {
-    switch (err.message) {
-      case "test":
-        res.status(400).json({ message: "Server is timing out" });
-    }
-  });
+  app.use(errorHandler);
 
   const casRouter = require("./routes/cas.route");
   app.use(passport.initialize());

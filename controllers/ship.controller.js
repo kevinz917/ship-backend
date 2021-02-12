@@ -21,7 +21,7 @@ const getShips = async (req, res, next) => {
     let fetchedUser = await User.findById(userId);
 
     if (!fetchedUser) {
-      const err = new Error("Could not add user");
+      const err = new Error("Could not fetch ships");
       err.statusCode = 401;
       return next(err);
     }

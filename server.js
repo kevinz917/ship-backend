@@ -5,20 +5,39 @@ const passport = require("passport");
 const session = require("express-session");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const cookieParser = require("cookie-parser");
+var timeout = require("connect-timeout");
 
 require("dotenv").config();
 
 const app = express();
 const port = process.env.PORT || 5000;
 
+function haltOnTimedout(req, res, next) {
+  console.log("bruh");
+  if (!req.timedout) {
+    console.log("bruh");
+    next();
+  } else {
+    console.log("bruh");
+    res.json({ message: "bruh" });
+  }
+}
+
 app.set("trust proxy", true);
 app.use(express.json());
+// app.use(timeout("10s"));
+
+// app.use((req, res, next) => {
+//   res.json({ done: "done" });
+//   // next();
+// });
 
 const store = new MongoDBStore({
   uri: process.env.ATLAS_URI,
   collection: "userSessions",
   expires: 365 * 24 * 60 * 60 * 1000,
 });
+
 store.on("error", function (error) {
   console.log(error);
 });
@@ -73,9 +92,20 @@ connection.once("open", () => {
   const userRouter = require("./routes/user.route");
   app.use("/user", userRouter);
 
+  app.use(haltOnTimedout);
+
+  // playing around with error handlers
+  app.use((err, req, res, next) => {
+    switch (err.message) {
+      case "test":
+        res.status(400).json({ message: "Server is timing out" });
+    }
+  });
+
   const casRouter = require("./routes/cas.route");
   app.use(passport.initialize());
   app.use(passport.session());
+
   app.use("/auth", casRouter);
 
   // Once routes have been created, start listening.

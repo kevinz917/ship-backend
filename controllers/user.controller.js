@@ -301,6 +301,16 @@ const fetchData = async (req, res, next) => {
   }
 };
 
+const test = async (req, res, next) => {
+  try {
+    next(new Error("test"));
+
+    // res.json({ test: "Testing" });
+  } catch (err) {
+    next(err);
+  }
+};
+
 module.exports = {
   getUsers,
   addUser,
@@ -313,4 +323,5 @@ module.exports = {
   saveAnswers,
   fetchUserAnswers,
   fetchData,
+  test,
 };

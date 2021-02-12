@@ -31,4 +31,7 @@ router.post("/fetchUserAnswers", userController.fetchUserAnswers);
 // Fetch juicy data
 router.get("/fetchData", userController.fetchData);
 
+// Test
+router.get("/test", userController.test);
+
 module.exports = router;

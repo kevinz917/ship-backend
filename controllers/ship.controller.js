@@ -179,7 +179,7 @@ const addMultiple = async (req, res, next) => {
     }
 
     // Double check for ship length
-    if (fetchedUser.ships.length >= 5) {
+    if (fetchedUser.ships.length > 5) {
       res.status(200).json({ message: "No bueno" });
       return;
     }

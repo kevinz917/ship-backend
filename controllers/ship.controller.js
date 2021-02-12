@@ -8,7 +8,7 @@ const mg = mailgun({ apiKey: process.env.MAILGUN_API_KEY, domain: DOMAIN });
 const countShips = async (req, res, next) => {
   try {
     let count = await Ship.count();
-    res.json({ count: count });
+    if (count) res.json({ count: count });
   } catch (err) {
     next(err);
   }
@@ -26,7 +26,9 @@ const getShips = async (req, res, next) => {
       return next(err);
     }
 
-    let allShips = await Ship.find().select("-creator_netId");
+    // Why is the .select needed?
+    // let allShips = await Ship.find().select("-creator_netId");
+    let allShips = await Ship.find();
 
     if (!allShips) {
       const err = new Error("Could not fetch all ships");
@@ -47,9 +49,8 @@ const addShip = async (req, res, next) => {
   try {
     let creator_netId = req.session.netId;
 
-    if (creator_netId === "cjm253") {
-      console.log("CONNOR MANN /addShip");
-    }
+    if (creator_netId === "cjm253") console.log("CONNOR MANN /addShip");
+
     if (!creator_netId || creator_netId === "cjm253") {
       res.status(200).json({ message: "No bueno" });
       return;
@@ -150,23 +151,23 @@ const addMultiple = async (req, res, next) => {
     let creator_netId = req.session.netId;
     let shipList = req.body.shipList;
 
-    if (creator_netId === "cjm253") {
-      console.log("CONNOR MANN /addMultiple");
-    }
+    if (creator_netId === "cjm253") console.log("CONNOR MANN /addMultiple");
 
     let fetchedUser = await User.findById(userId);
 
-    console.log(fetchedUser);
-
+    // auth
     if (!creator_netId) {
       res.status(200).json({ message: "No bueno" });
       return;
     }
+
+    // Ban connor mann specifically
     if (creator_netId === "cjm253") {
       res.status(200).json({ message: "No bueno" });
       return;
     }
 
+    // Double check for ship length
     if (fetchedUser.ships.length >= 5) {
       res.status(200).json({ message: "No bueno" });
       return;

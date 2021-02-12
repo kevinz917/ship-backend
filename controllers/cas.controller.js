@@ -79,7 +79,7 @@ const casLogin = (req, res, next) => {
         return res.redirect(req.query.redirect);
       }
       res.cookie("userId", userId);
-      return res.redirect(process.env.FRONTEND_URL);
+      return res.redirect(process.env.FRONTEND_URL + "ship");
     });
   })(req, res, next);
 };

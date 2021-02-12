@@ -146,6 +146,10 @@ const addMultiple = async (req, res, next) => {
       res.status(200).json({ message: "No bueno", user: savedUser });
     }
 
+    if (fetchedUser.ships.length >= 5) {
+      res.status(200).json({ message: "No bueno", user: savedUser });
+    }
+
     // delete existing ships
     for (let i = 0; i < fetchedUser.ships.length; i++) {
       let shipId = fetchedUser.ships[i];

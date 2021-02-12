@@ -27,8 +27,8 @@ const getShips = async (req, res, next) => {
     }
 
     // Why is the .select needed?
-    // let allShips = await Ship.find().select("-creator_netId");
-    let allShips = await Ship.find();
+    let allShips = await Ship.find().select("-creator_netId");
+    // let allShips = await Ship.find();
 
     if (!allShips) {
       const err = new Error("Could not fetch all ships");

@@ -143,14 +143,14 @@ const addMultiple = async (req, res, next) => {
     let fetchedUser = await User.findById(userId);
 
     if (!creator_netId) {
-      res.status(200).json({ message: "No bueno", user: savedUser });
+      res.status(200).json({ message: "No bueno" });
     }
     if (fetchedUser.netId === "cjm253") {
-      res.status(200).json({ message: "No bueno", user: savedUser });
+      res.status(200).json({ message: "No bueno" });
     }
 
     if (fetchedUser.ships.length >= 5) {
-      res.status(200).json({ message: "No bueno", user: savedUser });
+      res.status(200).json({ message: "No bueno" });
     }
 
     // delete existing ships

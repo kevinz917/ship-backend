@@ -21,15 +21,16 @@ const getShips = async (req, res, next) => {
     let fetchedUser = await User.findById(userId);
 
     if (!fetchedUser) {
-      const err = new Error("Could not add user");
+      const err = new Error("Could not fetch ships");
       err.statusCode = 401;
       return next(err);
     }
 
-    // Why is the .select needed?
-    let allShips = await Ship.find().select("-creator_netId");
-    // let allShips = await Ship.find();
 
+    let allShips = await Ship.find({ privacy: "public" }).select(
+      "-creator_netId"
+    );
+    
     if (!allShips) {
       const err = new Error("Could not fetch all ships");
       err.statusCode = 404;
@@ -115,13 +116,11 @@ const toggleVote = async (req, res, next) => {
     let fetchedShip = await Ship.findById(shipId);
 
     if (fetchedShip.privacy === "private") {
-      res
-        .status(200)
-        .json({
-          status: "failure",
-          message: "You cannot vote to private ships",
-        });
-    }
+      res.status(200).json({
+        status: "failure",
+        message: "You cannot vote to private ships",
+      });
+
 
     let fetchedUser = await User.findById(userId);
 

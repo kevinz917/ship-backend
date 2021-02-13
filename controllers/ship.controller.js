@@ -234,8 +234,8 @@ const addMultiple = async (req, res, next) => {
           };
 
           // Send email
-          // let email = await mg.messages().send(data);
-          // if (email) console.log(email);
+          let email = await mg.messages().send(data);
+          if (email) console.log(email);
 
           // mg.messages().send(data, function (error, body) {
           //   console.log(body);

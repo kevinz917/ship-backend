@@ -2,6 +2,7 @@ const ms = require("ms");
 const router = require("express").Router();
 const userController = require("../controllers/user.controller");
 var timeout = require("connect-timeout");
+const { auth } = require("../middleware/auth");
 
 // Fetch all users
 router.get("/", userController.getUsers);
@@ -34,16 +35,18 @@ router.post("/fetchUserAnswers", userController.fetchUserAnswers);
 router.get("/fetchData", userController.fetchData);
 
 // Testing error handling
-router.route("/test").get(setConnectionTimeout("0"), userController.test);
+router.get("/test", auth, userController.test);
 
-function setConnectionTimeout(time) {
-  console.log("Setting");
-  var delay = typeof time === "string" ? ms(time) : Number(time || 5000);
+// router.route("/test").get(setConnectionTimeout("0"), userController.test);
 
-  return function (req, res, next) {
-    req.connection.setTimeout(delay);
-    next();
-  };
-}
+// function setConnectionTimeout(time) {
+//   console.log("Setting");
+//   var delay = typeof time === "string" ? ms(time) : Number(time || 5000);
+
+//   return function (req, res, next) {
+//     req.connection.setTimeout(delay);
+//     next();
+//   };
+// }
 
 module.exports = router;

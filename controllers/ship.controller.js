@@ -26,10 +26,11 @@ const getShips = async (req, res, next) => {
       return next(err);
     }
 
+
     let allShips = await Ship.find({ privacy: "public" }).select(
       "-creator_netId"
     );
-
+    
     if (!allShips) {
       const err = new Error("Could not fetch all ships");
       err.statusCode = 404;
@@ -119,7 +120,7 @@ const toggleVote = async (req, res, next) => {
         status: "failure",
         message: "You cannot vote to private ships",
       });
-    }
+
 
     let fetchedUser = await User.findById(userId);
 

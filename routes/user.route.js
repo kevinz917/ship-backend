@@ -5,28 +5,28 @@ var timeout = require("connect-timeout");
 const { auth } = require("../middleware/auth");
 
 // Fetch all users
-router.get("/", userController.getUsers);
+// router.get("/", userController.getUsers);
 
 // Add new user
 router.post("/add", userController.addUser);
 
 // Remove ship from user
-router.post("/removeShip", userController.removeShip);
+router.post("/removeShip", auth, userController.removeShip);
 
 // Fetch user
-router.get("/fetchUser", userController.fetchUser);
+router.get("/fetchUser", auth, userController.fetchUser);
 
 // Toggle privacy
-router.post("/togglePrivacy", userController.togglePrivacy);
+router.post("/togglePrivacy", auth, userController.togglePrivacy);
 
 // Fetch all Yale Students
 router.get("/allStudents", userController.fetchStudents);
 
 // Fetch ships from users
-router.get("/fetchShips", userController.fetchUserShips);
+router.get("/fetchShips", auth, userController.fetchUserShips);
 
 // Save answers to user
-router.post("/saveAnswers", userController.saveAnswers);
+router.post("/saveAnswers", auth, userController.saveAnswers);
 
 // Fetch ship partner's answers
 router.post("/fetchUserAnswers", userController.fetchUserAnswers);
@@ -35,7 +35,7 @@ router.post("/fetchUserAnswers", userController.fetchUserAnswers);
 router.get("/fetchData", userController.fetchData);
 
 // Testing error handling
-router.get("/test", auth, userController.test);
+// router.get("/test", auth, userController.test);
 
 // router.route("/test").get(setConnectionTimeout("0"), userController.test);
 

@@ -107,11 +107,21 @@ const toggleVote = async (req, res, next) => {
       res.status(200).json({ message: "Nice Try Erik" });
       return;
     }
+
     let userId = req.session.userId;
     let shipId = req.body.shipId;
     let vote = req.body.vote;
 
     let fetchedShip = await Ship.findById(shipId);
+
+    if (fetchedShip.privacy === "private") {
+      res
+        .status(200)
+        .json({
+          status: "failure",
+          message: "You cannot vote to private ships",
+        });
+    }
 
     let fetchedUser = await User.findById(userId);
 

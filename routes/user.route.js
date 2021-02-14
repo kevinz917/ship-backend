@@ -11,42 +11,27 @@ const { auth } = require("../middleware/auth");
 router.post("/add", userController.addUser);
 
 // Remove ship from user
-router.post("/removeShip", auth, userController.removeShip);
+// router.post("/removeShip", auth, userController.removeShip);
 
 // Fetch user
 router.get("/fetchUser", auth, userController.fetchUser);
 
 // Toggle privacy
-router.post("/togglePrivacy", auth, userController.togglePrivacy);
+// router.post("/togglePrivacy", auth, userController.togglePrivacy);
 
 // Fetch all Yale Students
-router.get("/allStudents", userController.fetchStudents);
+router.get("/allStudents", auth, userController.fetchStudents);
 
 // Fetch ships from users
 router.get("/fetchShips", auth, userController.fetchUserShips);
 
 // Save answers to user
-router.post("/saveAnswers", auth, userController.saveAnswers);
+// router.post("/saveAnswers", auth, userController.saveAnswers);
 
 // Fetch ship partner's answers
-router.post("/fetchUserAnswers", userController.fetchUserAnswers);
+// router.post("/fetchUserAnswers", userController.fetchUserAnswers);
 
 // Fetch juicy data
-router.get("/fetchData", userController.fetchData);
-
-// Testing error handling
-// router.get("/test", auth, userController.test);
-
-// router.route("/test").get(setConnectionTimeout("0"), userController.test);
-
-// function setConnectionTimeout(time) {
-//   console.log("Setting");
-//   var delay = typeof time === "string" ? ms(time) : Number(time || 5000);
-
-//   return function (req, res, next) {
-//     req.connection.setTimeout(delay);
-//     next();
-//   };
-// }
+// router.get("/fetchData", userController.fetchData);
 
 module.exports = router;
